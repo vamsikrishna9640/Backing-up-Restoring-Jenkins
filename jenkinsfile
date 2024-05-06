@@ -1,0 +1,37 @@
+pipeline {
+    
+    agent any 
+
+    stages {
+        
+        stage('Checkout'){
+           steps {
+                git url: 'https://github.com/vamsikrishna9640/Django-ChatApp',
+                    branch: 'main'
+           }
+        }
+
+        stage('Build Docker'){
+            steps{
+                script{
+                    sh '''
+                    echo 'Buid Docker Image'
+                    docker build -t djangochatapp .
+                    '''
+                }
+            }
+        }
+
+        stage('Run Docker Image'){
+           steps{
+                script{
+                    sh '''
+                    echo 'running docker immage'
+                    docker run -d -p 5000:5000 djangochatapp
+                    '''
+                }
+            }
+        }
+        
+    }
+}
